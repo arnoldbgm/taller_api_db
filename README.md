@@ -170,8 +170,8 @@ http://localhost:5000/api/v1/categorias
 
 Durante el taller trabajaremos en:
 
-* Conectar controladores a la base de datos con Prisma
-* Definir rutas con Express
+* [Conectar controladores a la base de datos con Prisma](https://arnoldbgm.github.io/taller_api_db/docs/CONTROLLER)
+* [Definir rutas con Express](https://arnoldbgm.github.io/taller_api_db/docs/RUTA)
 * Validar y mostrar información desde PostgreSQL
 * Probar los endpoints con Postman
 
