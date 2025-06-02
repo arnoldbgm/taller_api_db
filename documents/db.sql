@@ -19,15 +19,12 @@ CREATE TABLE productos (
   id SERIAL PRIMARY KEY,
   nombre VARCHAR(150) NOT NULL,
   descripcion TEXT,
-  precio NUMERIC(10,2) NOT NULL CHECK (precio >= 0),
+  precio NUMERIC(10,2) NOT NULL,
   categoria_id INTEGER NOT NULL,
   CONSTRAINT fk_producto_categoria
     FOREIGN KEY (categoria_id) REFERENCES categorias(id)
     ON DELETE RESTRICT ON UPDATE CASCADE
 );
-
--- 4. Índices útiles
-CREATE INDEX idx_productos_categoria ON productos(categoria_id);
 
 -- Insertar categorías
 INSERT INTO categorias (nombre, descripcion) VALUES
