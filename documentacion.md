@@ -4,17 +4,17 @@ repository:
   owner: unknown
   url: ""
 generated:
-  timestamp: 2025-06-02T02:17:42.745Z
+  timestamp: 2025-06-02T03:31:15.535Z
   tool: FlatRepo
 statistics:
-  totalFiles: 6
-  totalLines: 77
+  totalFiles: 11
+  totalLines: 97
   languages:
     json: 1
-    javascript: 3
+    javascript: 8
   fileTypes:
     .json: 1
-    .js: 3
+    .js: 8
     "": 1
     .prisma: 1
 ---
@@ -36,8 +36,11 @@ statistics:
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@prisma/client": "^6.8.2",
+    "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "express": "^5.1.0",
+    "morgan": "^1.10.0",
     "nodemon": "^3.1.10"
   },
   "devDependencies": {
@@ -79,15 +82,18 @@ export const IP_SERVER = "localhost";
 import express from "express";
 import cors from "cors";
 import { API_VERSION } from "./constants.js";
+import { api as categoriasRouter } from "./routes/categorias.routes.js";
+import morgan from "morgan";
 
 
 export const app = express();
 
 app.use(express.json());
 app.use(cors());
-
+app.use(morgan("dev"));
 // Aqui van tus rutas
 // app.use(`/api/${API_VERSION}`, );
+app.use(`/api/${API_VERSION}`, categoriasRouter);
 ```
 === EOF: app.js
 
@@ -99,21 +105,27 @@ app.use(cors());
 # Prisma supports the native connection string format for PostgreSQL, MySQL, SQLite, SQL Server, MongoDB and CockroachDB.
 # See the documentation for all the connection string options: https://pris.ly/d/connection-strings
 
-DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
+DATABASE_URL="postgresql://postgres:root@localhost:5432/taller_db?schema=public"
 ```
 === EOF: .env copy
 
+===  utils\utils.js
+```javascript
+
+```
+=== EOF: utils\utils.js
+
+===  utils\conexion.js
+```javascript
+import { PrismaClient } from "@prisma/client";
+export const conexion = new PrismaClient();
+```
+=== EOF: utils\conexion.js
+
 ===  prisma\schema.prisma
 ```
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -122,4 +134,38 @@ datasource db {
 }
 ```
 === EOF: prisma\schema.prisma
+
+===  routes\categorias.routes.js
+```javascript
+import { Router } from "express";
+
+import { mostrarCategorias } from "../controllers/categorias.controller.js";
+
+export const api = Router();
+
+api.get("/categorias", mostrarCategorias);
+```
+=== EOF: routes\categorias.routes.js
+
+===  middlewares\middlewares.js
+```javascript
+
+```
+=== EOF: middlewares\middlewares.js
+
+===  controllers\categorias.controller.js
+```javascript
+import { conexion } from "../utils/conexion.js"
+
+export async function mostrarCategorias(req, res) {
+   try {
+      const categorias = await conexion.categorias.findMany();
+      res.json(categorias);
+   } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Error al obtener categorías" });
+   }
+}
+```
+=== EOF: controllers\categorias.controller.js
 
