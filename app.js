@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import { API_VERSION } from "./constants.js";
 import { api as categoriasRouter } from "./routes/categorias.routes.js";
+import { api as productosRouter} from "./routes/productos.routes.js"
+import { api as usuariosRouter } from "./routes/usuarios.routes.js";
 import morgan from "morgan";
 
 
@@ -13,3 +15,5 @@ app.use(morgan("dev"));
 // Aqui van tus rutas
 // app.use(`/api/${API_VERSION}`, );
 app.use(`/api/${API_VERSION}`, categoriasRouter);
+app.use(`/api/${API_VERSION}`, productosRouter);
+app.use(`/api/${API_VERSION}`, usuariosRouter);
